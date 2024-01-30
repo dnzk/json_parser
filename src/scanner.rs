@@ -1,21 +1,4 @@
-#[derive(Debug)]
-struct TokenData {
-    lexeme: Option<String>,
-    line: usize,
-}
-
-#[derive(Debug)]
-enum Token {
-    LeftBrace(TokenData),
-    RightBrace(TokenData),
-    LeftBracket(TokenData),
-    RightBracket(TokenData),
-    Number(TokenData, f64),
-    String(TokenData, String),
-    Boolean(TokenData),
-    Null(TokenData),
-    Newline,
-}
+use crate::token::{Token, TokenData};
 
 struct Source {
     source: String,
@@ -77,13 +60,12 @@ impl Scanner {
         }
     }
 
-    pub fn scan_tokens(&mut self) {
+    pub fn scan_tokens(&mut self) -> Vec<Token> {
         let mut tokens: Vec<Token> = vec![];
         while let Some(t) = self.source.next() {
-            dbg!(&t);
             tokens.push(t);
         }
 
-        dbg!(tokens);
+        tokens
     }
 }
