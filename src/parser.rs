@@ -26,6 +26,7 @@ impl Parser {
             left: None,
             right: None,
         };
+        dbg!(&self.tokens);
         for token in self.tokens {
             match token {
                 Token::LeftBrace(_) => {

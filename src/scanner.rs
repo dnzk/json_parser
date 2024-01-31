@@ -17,9 +17,56 @@ impl Source {
         }
     }
 
+    fn peek_next(&self) -> Option<char> {
+        let peek_index = self.current + 1;
+        if peek_index <= self.source.len() {
+            return self.source.chars().nth(peek_index);
+        }
+        None
+    }
+
     fn advance(&mut self, token: Token) -> Option<Token> {
         self.current += 1;
         Some(token)
+    }
+
+    fn string(&mut self) -> Option<Token> {
+        let mut string_content = String::new();
+        let mut is_key = false;
+        while let Some(next) = self.peek_next() {
+            if next == '"' {
+                self.current += 1;
+                if let Some(next) = self.peek_next() {
+                    if next == ':' {
+                        is_key = true;
+                        string_content = self.source[self.start + 1..self.current].to_string();
+                        self.current += 1;
+                        break;
+                    }
+                }
+                string_content = self.source[self.start + 1..self.current].to_string();
+                self.current += 1;
+                break;
+            } else {
+                self.current += 1;
+            }
+        }
+        if is_key {
+            return Some(Token::Key(
+                TokenData {
+                    lexeme: Some(string_content.clone()),
+                    line: self.line,
+                },
+                string_content,
+            ));
+        }
+        Some(Token::String(
+            TokenData {
+                lexeme: Some(string_content.clone()),
+                line: self.line,
+            },
+            string_content,
+        ))
     }
 }
 
@@ -42,6 +89,7 @@ impl Iterator for Source {
                     self.line += 1;
                     self.advance(Token::Newline)
                 }
+                '"' => self.string(),
                 _ => None,
             };
         }
@@ -63,7 +111,11 @@ impl Scanner {
     pub fn scan_tokens(&mut self) -> Vec<Token> {
         let mut tokens: Vec<Token> = vec![];
         while let Some(t) = self.source.next() {
-            tokens.push(t);
+            match t {
+                Token::Unused => (),
+                Token::Newline => (),
+                token => tokens.push(token),
+            }
         }
 
         tokens
