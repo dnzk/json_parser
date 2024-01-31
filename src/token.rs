@@ -15,6 +15,8 @@ pub enum Token {
     Key(TokenData, String),
     Boolean(TokenData),
     Null(TokenData),
+    Colon(TokenData),
+    Comma(TokenData),
     Newline,
     Unused,
 }

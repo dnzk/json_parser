@@ -78,11 +78,11 @@ impl Iterator for Source {
         if let Some(c) = self.source.chars().nth(self.current) {
             return match c {
                 '{' => self.advance(Token::LeftBrace(TokenData {
-                    lexeme: None,
+                    lexeme: Some(String::from("{")),
                     line: self.line,
                 })),
                 '}' => self.advance(Token::RightBrace(TokenData {
-                    lexeme: None,
+                    lexeme: Some(String::from("}")),
                     line: self.line,
                 })),
                 '\n' => {
@@ -90,7 +90,15 @@ impl Iterator for Source {
                     self.advance(Token::Newline)
                 }
                 '"' => self.string(),
-                _ => None,
+                ':' => self.advance(Token::Colon(TokenData {
+                    lexeme: Some(String::from(":")),
+                    line: self.line,
+                })),
+                w if w.is_ascii_whitespace() => {
+                    self.current += 1;
+                    Some(Token::Unused)
+                }
+                _ => Some(Token::Unused),
             };
         }
         None
