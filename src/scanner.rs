@@ -139,6 +139,14 @@ impl Iterator for Source {
                     lexeme: Some(String::from("}")),
                     line: self.line,
                 })),
+                '[' => self.advance(Token::LeftBracket(TokenData {
+                    lexeme: Some(String::from("[")),
+                    line: self.line,
+                })),
+                ']' => self.advance(Token::RightBracket(TokenData {
+                    lexeme: Some(String::from("]")),
+                    line: self.line,
+                })),
                 '\n' => {
                     self.line += 1;
                     self.advance(Token::Newline)

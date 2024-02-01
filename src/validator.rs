@@ -80,6 +80,13 @@ impl SyntaxValidator {
                 Token::RightBrace(_) => {
                     valid = valid && SyntaxValidator::after_right_brace(next_token)
                 }
+                Token::LeftBracket(_) => {
+                    valid = valid && SyntaxValidator::after_left_bracket(next_token)
+                }
+                Token::RightBracket(_) => {
+                    valid = valid && SyntaxValidator::after_right_bracket(next_token)
+                }
+                Token::Null(_) => valid = valid && SyntaxValidator::after_null(next_token),
                 Token::Key(_, _) => valid = valid && SyntaxValidator::after_key(next_token),
                 Token::String(_, _) => valid = valid && SyntaxValidator::after_string(next_token),
                 Token::Colon(_) => valid = valid && SyntaxValidator::after_colon(next_token),
@@ -127,6 +134,7 @@ impl SyntaxValidator {
     fn after_right_bracket(token: &Token) -> bool {
         match token {
             Token::Comma(_) => true,
+            Token::RightBrace(_) => true,
             _ => false,
         }
     }

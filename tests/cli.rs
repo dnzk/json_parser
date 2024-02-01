@@ -47,3 +47,9 @@ fn step3_invalid() {
     let mut cmd = Command::cargo_bin("json_parser").unwrap();
     cmd.arg("./test_files/step3/invalid.json").assert().code(1);
 }
+
+#[test]
+fn step4_valid() {
+    let mut cmd = Command::cargo_bin("json_parser").unwrap();
+    cmd.arg("./test_files/step4/valid.json").assert().code(0);
+}
