@@ -102,7 +102,10 @@ impl Iterator for Source {
                     self.current += 1;
                     Some(Token::Unused)
                 }
-                _ => Some(Token::Unused),
+                _ => {
+                    self.current += 1;
+                    Some(Token::Unused)
+                }
             };
         }
         None
