@@ -87,6 +87,7 @@ impl SyntaxValidator {
                 Token::True(_) | Token::False(_) => {
                     valid = valid && SyntaxValidator::after_boolean(next_token)
                 }
+                Token::Number(_, _) => valid = valid && SyntaxValidator::after_number(next_token),
                 _ => (),
             }
             index += 1;

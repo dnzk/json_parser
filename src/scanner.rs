@@ -101,6 +101,27 @@ impl Source {
         self.current += 1;
         Some(Token::Unused)
     }
+
+    fn number(&mut self) -> Option<Token> {
+        let mut result = String::new();
+        self.current += 1;
+        while let Some(next) = self.peek_next() {
+            if next.is_ascii_digit() {
+                self.current += 1;
+                result = self.source[self.start..self.current + 1].to_string();
+            } else {
+                self.current += 1;
+                break;
+            }
+        }
+        Some(Token::Number(
+            TokenData {
+                lexeme: Some(result.to_string()),
+                line: self.line,
+            },
+            result.parse::<f64>().unwrap(),
+        ))
+    }
 }
 
 impl Iterator for Source {
@@ -134,6 +155,7 @@ impl Iterator for Source {
                 't' => self.maybe_boolean(true),
                 'f' => self.maybe_boolean(false),
                 'n' => self.maybe_null(),
+                n if n.is_ascii_digit() => self.number(),
                 w if w.is_ascii_whitespace() => {
                     self.current += 1;
                     Some(Token::Unused)
