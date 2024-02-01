@@ -94,6 +94,10 @@ impl Iterator for Source {
                     lexeme: Some(String::from(":")),
                     line: self.line,
                 })),
+                ',' => self.advance(Token::Comma(TokenData {
+                    lexeme: Some(String::from(",")),
+                    line: self.line,
+                })),
                 w if w.is_ascii_whitespace() => {
                     self.current += 1;
                     Some(Token::Unused)
