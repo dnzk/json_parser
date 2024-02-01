@@ -84,6 +84,9 @@ impl SyntaxValidator {
                 Token::String(_, _) => valid = valid && SyntaxValidator::after_string(next_token),
                 Token::Colon(_) => valid = valid && SyntaxValidator::after_colon(next_token),
                 Token::Comma(_) => valid = valid && SyntaxValidator::after_comma(next_token),
+                Token::True(_) | Token::False(_) => {
+                    valid = valid && SyntaxValidator::after_boolean(next_token)
+                }
                 _ => (),
             }
             index += 1;
@@ -113,7 +116,8 @@ impl SyntaxValidator {
             Token::LeftBrace(_) => true,
             Token::Number(_, _) => true,
             Token::String(_, _) => true,
-            Token::Boolean(_) => true,
+            Token::True(_) => true,
+            Token::False(_) => true,
             Token::Null(_) => true,
             _ => false,
         }
@@ -139,7 +143,8 @@ impl SyntaxValidator {
             Token::LeftBracket(_) => true,
             Token::Number(_, _) => true,
             Token::String(_, _) => true,
-            Token::Boolean(_) => true,
+            Token::True(_) => true,
+            Token::False(_) => true,
             Token::Null(_) => true,
             _ => false,
         }
@@ -150,7 +155,8 @@ impl SyntaxValidator {
             Token::Key(_, _) => true,
             Token::Number(_, _) => true,
             Token::String(_, _) => true,
-            Token::Boolean(_) => true,
+            Token::True(_) => true,
+            Token::False(_) => true,
             Token::Null(_) => true,
             _ => false,
         }

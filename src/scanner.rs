@@ -68,6 +68,27 @@ impl Source {
             string_content,
         ))
     }
+
+    fn maybe_boolean(&mut self, is_true: bool) -> Option<Token> {
+        if is_true {
+            if &self.source[self.current..self.current + 4] == "true" {
+                self.current += 4;
+                return Some(Token::True(TokenData {
+                    lexeme: Some(String::from("true")),
+                    line: self.line,
+                }));
+            }
+        }
+        if &self.source[self.current..self.current + 5] == "false" {
+            self.current += 5;
+            return Some(Token::False(TokenData {
+                lexeme: Some(String::from("false")),
+                line: self.line,
+            }));
+        }
+        self.current += 1;
+        Some(Token::Unused)
+    }
 }
 
 impl Iterator for Source {
@@ -98,6 +119,8 @@ impl Iterator for Source {
                     lexeme: Some(String::from(",")),
                     line: self.line,
                 })),
+                't' => self.maybe_boolean(true),
+                'f' => self.maybe_boolean(false),
                 w if w.is_ascii_whitespace() => {
                     self.current += 1;
                     Some(Token::Unused)
@@ -133,6 +156,7 @@ impl Scanner {
             }
         }
 
+        dbg!(&tokens);
         tokens
     }
 }
