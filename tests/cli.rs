@@ -31,3 +31,11 @@ fn step2_valid2() {
         .assert()
         .stdout("JSON is valid\n");
 }
+
+#[test]
+fn step2_invalid() {
+    let mut cmd = Command::cargo_bin("json_parser").unwrap();
+    cmd.arg("./test_files/step2/invalid.json")
+        .assert()
+        .stderr("JSON is invalid\n");
+}
