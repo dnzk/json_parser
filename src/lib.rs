@@ -1,6 +1,6 @@
 mod scanner;
 pub use scanner::Scanner;
-mod parser;
-pub use parser::Parser;
+mod syntax;
 mod token;
 mod validator;
+pub use validator::Validator;

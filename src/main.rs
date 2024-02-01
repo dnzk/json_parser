@@ -1,4 +1,4 @@
-use json_parser::{Parser, Scanner};
+use json_parser::{Scanner, Validator};
 use std::{env, process::ExitCode};
 
 fn main() -> ExitCode {
@@ -11,8 +11,8 @@ fn main() -> ExitCode {
     let content = std::fs::read_to_string(filepath);
     if let Ok(source) = content {
         let mut scanner = Scanner::from(source);
-        let parser = Parser::from(scanner.scan_tokens());
-        if parser.is_valid() {
+        let validator = Validator::from(scanner.scan_tokens());
+        if validator.valid() {
             println!("JSON is valid");
             return ExitCode::from(0);
         } else {
