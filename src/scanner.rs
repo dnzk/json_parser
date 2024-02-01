@@ -89,6 +89,18 @@ impl Source {
         self.current += 1;
         Some(Token::Unused)
     }
+
+    fn maybe_null(&mut self) -> Option<Token> {
+        if &self.source[self.current..self.current + 4] == "null" {
+            self.current += 4;
+            return Some(Token::Null(TokenData {
+                lexeme: Some(String::from("null")),
+                line: self.line,
+            }));
+        }
+        self.current += 1;
+        Some(Token::Unused)
+    }
 }
 
 impl Iterator for Source {
@@ -121,6 +133,7 @@ impl Iterator for Source {
                 })),
                 't' => self.maybe_boolean(true),
                 'f' => self.maybe_boolean(false),
+                'n' => self.maybe_null(),
                 w if w.is_ascii_whitespace() => {
                     self.current += 1;
                     Some(Token::Unused)
