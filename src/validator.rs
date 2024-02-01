@@ -5,9 +5,9 @@ pub struct TokenCleaner {
 }
 
 impl TokenCleaner {
-    pub fn from(tokens: Vec<Token>) -> Self {
+    pub fn from(tokens: Vec<Token>) -> Result<Self, String> {
         if tokens.len() == 0 {
-            panic!("Empty tokens");
+            return Err("JSON is empty".to_string());
         }
         let mut my_tokens: Vec<Token> = vec![];
         for t in tokens {
@@ -17,7 +17,7 @@ impl TokenCleaner {
             }
         }
 
-        TokenCleaner { tokens: my_tokens }
+        Ok(TokenCleaner { tokens: my_tokens })
     }
 }
 

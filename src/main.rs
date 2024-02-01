@@ -16,7 +16,7 @@ fn main() -> ExitCode {
             println!("JSON is valid");
             return ExitCode::from(0);
         } else {
-            println!("JSON is not valid");
+            eprintln!("JSON is invalid");
             return ExitCode::from(1);
         }
     }
