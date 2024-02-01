@@ -1,16 +1,5 @@
 use crate::token::Token;
-
-#[derive(Debug)]
-struct Pair {
-    left: Option<Token>,
-    right: Option<Token>,
-}
-
-impl Pair {
-    fn is_valid(&self) -> bool {
-        self.left.is_some() && self.right.is_some()
-    }
-}
+use crate::validator::{BraceValidator, SyntaxValidator, TokenCleaner};
 
 pub struct Parser {
     tokens: Vec<Token>,
@@ -21,24 +10,13 @@ impl Parser {
         Parser { tokens }
     }
 
-    pub fn is_valid(self) -> bool {
-        let mut pair = Pair {
-            left: None,
-            right: None,
-        };
-        dbg!(&self.tokens);
-        for token in self.tokens {
-            match token {
-                Token::LeftBrace(_) => {
-                    pair.left = Some(token);
-                }
-                Token::RightBrace(_) => {
-                    pair.right = Some(token);
-                }
-                _ => (),
-            }
+    pub fn is_valid(&self) -> bool {
+        let token_cleaner = TokenCleaner::from(self.tokens.clone());
+        let brace_validator = BraceValidator::from(token_cleaner);
+        if brace_validator.is_valid() {
+            let syntax_validator = SyntaxValidator::from(brace_validator.get_tokens());
+            return syntax_validator.validate();
         }
-
-        pair.is_valid()
+        false
     }
 }

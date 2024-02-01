@@ -13,7 +13,11 @@ fn main() -> ExitCode {
         let mut scanner = Scanner::from(source);
         let parser = Parser::from(scanner.scan_tokens());
         if parser.is_valid() {
+            println!("JSON is valid");
             return ExitCode::from(0);
+        } else {
+            println!("JSON is not valid");
+            return ExitCode::from(1);
         }
     }
     ExitCode::from(1)
