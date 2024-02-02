@@ -228,3 +228,31 @@ impl Iterator for Source {
         None
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn from_creates_default_state() {
+        let source = Source::from("asdf".to_string());
+        assert_eq!(source.start, 0);
+        assert_eq!(source.current, 0);
+        assert_eq!(source.line, 1);
+        assert_eq!(source.source, "asdf".to_string());
+    }
+
+    #[test]
+    fn peek_next_returns_next_char() {
+        let source = Source::from("asdf".to_string());
+        assert_eq!(source.peek_next(), Some('s'));
+    }
+
+    #[test]
+    fn advance_increments_current_by_one() {
+        let mut source = Source::from("asdf".to_string());
+        assert_eq!(source.current, 0);
+        source.advance(Token::Unused);
+        assert_eq!(source.current, 1);
+    }
+}
