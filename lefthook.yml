@@ -1,0 +1,7 @@
+pre-push:
+  parallel: true
+  commands:
+    clippy:
+      run: cargo clippy
+    test:
+      run: cargo test
