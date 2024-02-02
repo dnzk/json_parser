@@ -34,6 +34,18 @@ impl Source {
         let mut string_content = String::new();
         let mut is_key = false;
         while let Some(next) = self.peek_next() {
+            if next == '\\' {
+                self.current += 1;
+                if let Some(next) = self.peek_next() {
+                    if next == '"' {
+                        self.current += 2;
+                        continue;
+                    } else {
+                        self.current += 1;
+                        continue;
+                    }
+                }
+            }
             if next == '"' {
                 self.current += 1;
                 if let Some(next) = self.peek_next() {
