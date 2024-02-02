@@ -69,6 +69,27 @@ impl Source {
         ))
     }
 
+    fn invalid_string(&mut self) -> Option<Token> {
+        let mut string_content = String::new();
+        while let Some(next) = self.peek_next() {
+            if next.to_string() == "'".to_string() {
+                self.current += 1;
+                string_content = self.source[self.start + 1..self.current].to_string();
+                self.current += 1;
+                break;
+            } else {
+                self.current += 1;
+            }
+        }
+        Some(Token::InvalidString(
+            TokenData {
+                lexeme: Some(string_content.clone()),
+                line: self.line,
+            },
+            string_content.to_string(),
+        ))
+    }
+
     fn maybe_boolean(&mut self, is_true: bool) -> Option<Token> {
         if is_true {
             if &self.source[self.current..self.current + 4] == "true" {
@@ -168,7 +189,10 @@ impl Iterator for Source {
                     self.current += 1;
                     Some(Token::Unused)
                 }
-                _ => {
+                c => {
+                    if c.to_string() == "'".to_string() {
+                        return self.invalid_string();
+                    }
                     self.current += 1;
                     Some(Token::Unused)
                 }

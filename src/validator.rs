@@ -13,7 +13,13 @@ impl Validator {
     }
 
     pub fn valid(&self) -> bool {
-        self.tokens.len() > 0 && self.valid_braces() && self.valid_brackets() && self.valid_syntax()
+        if self.tokens.len() == 0 {
+            return false;
+        }
+        if self.contains_invalid_token() {
+            return false;
+        }
+        self.valid_braces() && self.valid_brackets() && self.valid_syntax()
     }
 
     fn clean_tokens(tokens: Vec<Token>) -> Vec<Token> {
@@ -25,6 +31,17 @@ impl Validator {
             }
         }
         my_tokens
+    }
+
+    fn contains_invalid_token(&self) -> bool {
+        let mut invalid = false;
+        for t in &self.tokens {
+            match t {
+                Token::InvalidString(_, _) => invalid = true,
+                _ => (),
+            }
+        }
+        invalid
     }
 
     fn valid_braces(&self) -> bool {

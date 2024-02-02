@@ -12,6 +12,7 @@ pub enum Token {
     RightBracket(TokenData),
     Number(TokenData, f64),
     String(TokenData, String),
+    InvalidString(TokenData, String),
     Key(TokenData, String),
     True(TokenData),
     False(TokenData),
