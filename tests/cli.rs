@@ -71,3 +71,9 @@ fn step5_valid() {
     let mut cmd = Command::cargo_bin("json_parser").unwrap();
     cmd.arg("./test_files/step5/valid.json").assert().code(0);
 }
+
+#[test]
+fn without_args() {
+    let mut cmd = Command::cargo_bin("json_parser").unwrap();
+    cmd.assert().code(65);
+}
