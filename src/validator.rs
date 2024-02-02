@@ -38,6 +38,7 @@ impl Validator {
         for t in &self.tokens {
             match t {
                 Token::InvalidString(_, _) => invalid = true,
+                Token::InvalidIdentifier(_) => invalid = true,
                 _ => (),
             }
         }

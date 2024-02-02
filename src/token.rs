@@ -13,6 +13,7 @@ pub enum Token {
     Number(TokenData, f64),
     String(TokenData, String),
     InvalidString(TokenData, String),
+    InvalidIdentifier(TokenData),
     Key(TokenData, String),
     True(TokenData),
     False(TokenData),

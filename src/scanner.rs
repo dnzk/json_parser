@@ -90,6 +90,24 @@ impl Source {
         ))
     }
 
+    fn invalid_identifier(&mut self) -> Option<Token> {
+        let mut identifier = String::new();
+        while let Some(next) = self.peek_next() {
+            if next == ':' || next == '\n' || next == ',' {
+                self.current += 1;
+                identifier = self.source[self.start..self.current].to_string();
+                self.current += 1;
+                break;
+            } else {
+                self.current += 1;
+            }
+        }
+        Some(Token::InvalidIdentifier(TokenData {
+            lexeme: Some(identifier),
+            line: self.line,
+        }))
+    }
+
     fn maybe_boolean(&mut self, is_true: bool) -> Option<Token> {
         if is_true {
             if &self.source[self.current..self.current + 4] == "true" {
@@ -193,8 +211,7 @@ impl Iterator for Source {
                     if c.to_string() == "'".to_string() {
                         return self.invalid_string();
                     }
-                    self.current += 1;
-                    Some(Token::Unused)
+                    self.invalid_identifier()
                 }
             };
         }
