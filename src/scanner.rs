@@ -249,7 +249,6 @@ impl Scanner {
                 token => tokens.push(token),
             }
         }
-        dbg!(&tokens);
         tokens
     }
 }
