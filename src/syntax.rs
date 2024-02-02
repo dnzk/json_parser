@@ -15,7 +15,7 @@ impl SyntaxChecker {
         while index < self.tokens.len() {
             if index + 1 == self.tokens.len() {
                 match self.tokens[index] {
-                    Token::RightBrace(_) => valid = valid && true,
+                    Token::RightBrace(_) => (),
                     _ => valid = false,
                 }
                 break;
@@ -42,10 +42,7 @@ impl SyntaxChecker {
 }
 
 fn after_left_brace(token: &Token) -> bool {
-    match token {
-        Token::RightBrace(_) | Token::Key(_, _) => true,
-        _ => false,
-    }
+    matches!(token, Token::RightBrace(_) | Token::Key(_, _))
 }
 
 fn after_right_brace(token: &Token) -> bool {
@@ -53,56 +50,49 @@ fn after_right_brace(token: &Token) -> bool {
 }
 
 fn after_left_bracket(token: &Token) -> bool {
-    match token {
-        Token::RightBracket(_) => true,
-        Token::LeftBrace(_) => true,
-        Token::Number(_, _) => true,
-        Token::String(_, _) => true,
-        Token::True(_) => true,
-        Token::False(_) => true,
-        Token::Null(_) => true,
-        _ => false,
-    }
+    matches!(
+        token,
+        Token::RightBracket(_)
+            | Token::LeftBrace(_)
+            | Token::Number(_, _)
+            | Token::String(_, _)
+            | Token::True(_)
+            | Token::False(_)
+            | Token::Null(_)
+    )
 }
 
 fn after_right_bracket(token: &Token) -> bool {
-    match token {
-        Token::Comma(_) => true,
-        Token::RightBrace(_) => true,
-        _ => false,
-    }
+    matches!(token, Token::Comma(_) | Token::RightBrace(_))
 }
 
 fn after_key(token: &Token) -> bool {
-    match token {
-        Token::Colon(_) => true,
-        _ => false,
-    }
+    matches!(token, Token::Colon(_))
 }
 
 fn after_colon(token: &Token) -> bool {
-    match token {
-        Token::LeftBrace(_) => true,
-        Token::LeftBracket(_) => true,
-        Token::Number(_, _) => true,
-        Token::String(_, _) => true,
-        Token::True(_) => true,
-        Token::False(_) => true,
-        Token::Null(_) => true,
-        _ => false,
-    }
+    matches!(
+        token,
+        Token::LeftBrace(_)
+            | Token::LeftBracket(_)
+            | Token::Number(_, _)
+            | Token::String(_, _)
+            | Token::True(_)
+            | Token::False(_)
+            | Token::Null(_)
+    )
 }
 
 fn after_comma(token: &Token) -> bool {
-    match token {
-        Token::Key(_, _) => true,
-        Token::Number(_, _) => true,
-        Token::String(_, _) => true,
-        Token::True(_) => true,
-        Token::False(_) => true,
-        Token::Null(_) => true,
-        _ => false,
-    }
+    matches!(
+        token,
+        Token::Key(_, _)
+            | Token::Number(_, _)
+            | Token::String(_, _)
+            | Token::True(_)
+            | Token::False(_)
+            | Token::Null(_)
+    )
 }
 
 fn after_number(token: &Token) -> bool {
@@ -122,10 +112,8 @@ fn after_null(token: &Token) -> bool {
 }
 
 fn after_value(token: &Token) -> bool {
-    match token {
-        Token::Comma(_) => true,
-        Token::RightBrace(_) => true,
-        Token::RightBracket(_) => true,
-        _ => false,
-    }
+    matches!(
+        token,
+        Token::Comma(_) | Token::RightBrace(_) | Token::RightBracket(_)
+    )
 }

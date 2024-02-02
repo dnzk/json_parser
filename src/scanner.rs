@@ -84,7 +84,7 @@ impl Source {
     fn invalid_string(&mut self) -> Option<Token> {
         let mut string_content = String::new();
         while let Some(next) = self.peek_next() {
-            if next.to_string() == "'".to_string() {
+            if next.to_string() == *"'".to_string() {
                 self.current += 1;
                 string_content = self.source[self.start + 1..self.current].to_string();
                 self.current += 1;
@@ -121,14 +121,12 @@ impl Source {
     }
 
     fn maybe_boolean(&mut self, is_true: bool) -> Option<Token> {
-        if is_true {
-            if &self.source[self.current..self.current + 4] == "true" {
-                self.current += 4;
-                return Some(Token::True(TokenData {
-                    lexeme: Some(String::from("true")),
-                    line: self.line,
-                }));
-            }
+        if is_true && &self.source[self.current..self.current + 4] == "true" {
+            self.current += 4;
+            return Some(Token::True(TokenData {
+                lexeme: Some(String::from("true")),
+                line: self.line,
+            }));
         }
         if &self.source[self.current..self.current + 5] == "false" {
             self.current += 5;
@@ -220,7 +218,7 @@ impl Iterator for Source {
                     Some(Token::Unused)
                 }
                 c => {
-                    if c.to_string() == "'".to_string() {
+                    if c.to_string() == *"'".to_string() {
                         return self.invalid_string();
                     }
                     self.invalid_identifier()
@@ -244,14 +242,13 @@ impl Scanner {
 
     pub fn scan_tokens(&mut self) -> Vec<Token> {
         let mut tokens: Vec<Token> = vec![];
-        while let Some(t) = self.source.next() {
+        for t in self.source.by_ref() {
             match t {
                 Token::Unused => (),
                 Token::Newline => (),
                 token => tokens.push(token),
             }
         }
-
         dbg!(&tokens);
         tokens
     }

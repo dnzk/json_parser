@@ -13,7 +13,7 @@ impl Validator {
     }
 
     pub fn valid(&self) -> bool {
-        if self.tokens.len() == 0 {
+        if self.tokens.is_empty() {
             return false;
         }
         if self.contains_invalid_token() {
