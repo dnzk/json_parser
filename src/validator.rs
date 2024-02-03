@@ -7,9 +7,7 @@ pub struct Validator {
 
 impl Validator {
     pub fn from(tokens: Vec<Token>) -> Self {
-        Validator {
-            tokens: Validator::clean_tokens(tokens),
-        }
+        Validator { tokens }
     }
 
     pub fn valid(&self) -> bool {
@@ -20,17 +18,6 @@ impl Validator {
             return false;
         }
         self.valid_braces() && self.valid_brackets() && self.valid_syntax()
-    }
-
-    fn clean_tokens(tokens: Vec<Token>) -> Vec<Token> {
-        let mut my_tokens: Vec<Token> = vec![];
-        for t in tokens {
-            match t {
-                Token::Unused => (),
-                token => my_tokens.push(token),
-            }
-        }
-        my_tokens
     }
 
     fn contains_invalid_token(&self) -> bool {

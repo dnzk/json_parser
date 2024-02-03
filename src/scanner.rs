@@ -13,14 +13,18 @@ impl Scanner {
     }
 
     pub fn scan_tokens(&mut self) -> Vec<Token> {
-        let mut tokens: Vec<Token> = vec![];
+        self.clean_tokens()
+    }
+
+    fn clean_tokens(&mut self) -> Vec<Token> {
+        let mut my_tokens: Vec<Token> = vec![];
         for t in self.source.by_ref() {
             match t {
                 Token::Unused => (),
                 Token::Newline => (),
-                token => tokens.push(token),
+                token => my_tokens.push(token),
             }
         }
-        tokens
+        my_tokens
     }
 }
