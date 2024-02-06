@@ -20,24 +20,28 @@ impl SyntaxChecker {
                 }
                 break;
             }
-            let next_token = &self.tokens[index + 1];
-            match self.tokens[index] {
-                Token::LeftBrace(_) => valid = valid && after_left_brace(next_token),
-                Token::RightBrace(_) => valid = valid && after_right_brace(next_token),
-                Token::LeftBracket(_) => valid = valid && after_left_bracket(next_token),
-                Token::RightBracket(_) => valid = valid && after_right_bracket(next_token),
-                Token::Null(_) => valid = valid && after_null(next_token),
-                Token::Key(_, _) => valid = valid && after_key(next_token),
-                Token::String(_, _) => valid = valid && after_string(next_token),
-                Token::Colon(_) => valid = valid && after_colon(next_token),
-                Token::Comma(_) => valid = valid && after_comma(next_token),
-                Token::True(_) | Token::False(_) => valid = valid && after_boolean(next_token),
-                Token::Number(_, _) => valid = valid && after_number(next_token),
-                _ => (),
-            }
+            valid = valid && valid_sequence(&self.tokens[index], &self.tokens[index + 1]);
             index += 1;
         }
         valid
+    }
+}
+
+/// Validates a sequence of two tokens
+fn valid_sequence(token: &Token, next_token: &Token) -> bool {
+    match token {
+        Token::LeftBrace(_) => after_left_brace(next_token),
+        Token::RightBrace(_) => after_right_brace(next_token),
+        Token::LeftBracket(_) => after_left_bracket(next_token),
+        Token::RightBracket(_) => after_right_bracket(next_token),
+        Token::Null(_) => after_null(next_token),
+        Token::Key(_, _) => after_key(next_token),
+        Token::String(_, _) => after_string(next_token),
+        Token::Colon(_) => after_colon(next_token),
+        Token::Comma(_) => after_comma(next_token),
+        Token::True(_) | Token::False(_) => after_boolean(next_token),
+        Token::Number(_, _) => after_number(next_token),
+        _ => false,
     }
 }
 
