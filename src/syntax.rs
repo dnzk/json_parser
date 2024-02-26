@@ -10,20 +10,21 @@ impl SyntaxChecker {
     }
 
     pub fn valid(&self) -> bool {
-        let mut index = 0;
-        let mut valid = true;
-        while index < self.tokens.len() {
-            if index + 1 == self.tokens.len() {
-                match self.tokens[index] {
-                    Token::RightBrace(_) => (),
-                    _ => valid = false,
-                }
-                break;
+        let mut left = 0;
+        let mut right = self.tokens.len() - 1;
+        while left < right {
+            let valid_left = valid_sequence(&self.tokens[left], &self.tokens[left + 1]);
+            if !valid_left {
+                return false;
             }
-            valid = valid && valid_sequence(&self.tokens[index], &self.tokens[index + 1]);
-            index += 1;
+            let valid_right = valid_sequence(&self.tokens[right - 1], &self.tokens[right]);
+            if !valid_right {
+                return false;
+            }
+            left += 1;
+            right -= 1;
         }
-        valid
+        true
     }
 }
 
